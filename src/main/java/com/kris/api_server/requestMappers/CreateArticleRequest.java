@@ -32,7 +32,7 @@ public class CreateArticleRequest {
 
     private List<Integer> user_id;
     
-    
+    //this is a getter
     public String getContent() {
         return content;
     }
