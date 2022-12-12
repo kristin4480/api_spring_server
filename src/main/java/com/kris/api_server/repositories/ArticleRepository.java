@@ -13,7 +13,8 @@ public interface ArticleRepository extends JpaRepository<Article, Integer>  {
    
 
     //@Query(value = "Select * From article Where title Like '_s%'", nativeQuery = true)
-    @Query("Select a From article a  Where a.title Like '_s%'")
+    //@Query("Select a From article a  Where a.title Like '_s%'")
+    @Query("Select a From article a")
     List<Article> findAllTitles();
 // List<Article> findByOrderByTitle();
 

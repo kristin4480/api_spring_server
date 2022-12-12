@@ -56,6 +56,12 @@ public class Article {
         this.content = content;
         this.is_active = is_active;
     }
+    public Article(int id, String title, String content, Boolean is_active){
+        this.id =  id;
+        this.title = title;
+        this.content = content;
+        this.is_active = is_active;
+    }
 
     public Article(){
         

@@ -19,49 +19,54 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity(name = "user")
 public class User {
-    
+
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @Column
     private String name;
     @Column(unique = true)
     private String email;
-   
+
     @ManyToMany
     @JsonManagedReference
-    @JoinTable(
-        name = "article_user",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "article_id")
-    )   
+    @JoinTable(name = "article_user", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "article_id"))
     private List<Article> articles;
-    
+
     @OneToMany(mappedBy = "user_id")
     @JsonBackReference
     private List<Comment> comment;
-    
-    
-    public User(String name, String email){
+
+    public User(String name, String email) {
         this.name = name;
         this.email = email;
     }
-    public User(){
+
+    public User() {
 
     }
 
     public int getId() {
         return id;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
+
     public String getEmail() {
         return email;
     }
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -69,6 +74,7 @@ public class User {
     public List<Article> getArticles() {
         return articles;
     }
+
     public void setArticles(List<Article> articles) {
         this.articles = articles;
     }
@@ -76,6 +82,7 @@ public class User {
     public List<Comment> getComment() {
         return comment;
     }
+
     public void setComment(List<Comment> comment) {
         this.comment = comment;
     }

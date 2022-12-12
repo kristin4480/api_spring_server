@@ -3,6 +3,7 @@ package com.kris.api_server.controllers;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,8 @@ public class ArticleController {
     }
 
     @PostMapping(produces = "application/json", value = "/articles")
-    public Article createArticle(@RequestBody @Valid CreateArticleRequest createArticleRequest){
+    public Article createArticle(@RequestBody @Valid CreateArticleRequest createArticleRequest, HttpServletResponse response){
+        response.setStatus(HttpServletResponse.SC_CREATED);
         return articleService.create(createArticleRequest);
     }
 

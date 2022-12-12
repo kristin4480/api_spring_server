@@ -19,40 +19,42 @@ import com.kris.api_server.requestMappers.CreateArticleRequest;
 
 @Service
 public class ArticleService {
-    
+
     private final ArticleRepository articleRepository;
     private final UserRepository userRepository;
+
     @Autowired
-    public ArticleService(ArticleRepository articleRepository, UserRepository userRepository){
+    public ArticleService(ArticleRepository articleRepository, UserRepository userRepository) {
         this.articleRepository = articleRepository;
         this.userRepository = userRepository;
     }
 
-    public List<Article> getall(){
+    public List<Article> getall() {
         return articleRepository.findAllTitles();
     }
 
-    public Optional<Article> getArticleByID(int id){
+    public Optional<Article> getArticleByID(int id) {
         return articleRepository.findById(id);
     }
-    
+
     @Transactional
-    public Article create(CreateArticleRequest createArticleRequest){
-        Article article = new Article(createArticleRequest.getTitle(), createArticleRequest.getContent(), createArticleRequest.getIs_active());
-       // article.setUser(Collections.toList(userRepository.getReferenceById(createArticleRequest.getUser_id())));
-       List<User> list = new ArrayList<>();
-       for(Integer userId: createArticleRequest.getUser_id()){
-       list.add(userRepository.getReferenceById(userId));
-       }
+    public Article create(CreateArticleRequest createArticleRequest) {
+        Article article = new Article(createArticleRequest.getTitle(), createArticleRequest.getContent(),
+                createArticleRequest.getIs_active());
+        // article.setUser(Collections.toList(userRepository.getReferenceById(createArticleRequest.getUser_id())));
+        List<User> list = new ArrayList<>();
+        for (Integer userId : createArticleRequest.getUser_id()) {
+            list.add(userRepository.getReferenceById(userId));
+        }
         article.setUser(list);
         return articleRepository.saveAndFlush(article);
     }
 
     @Transactional
-    public Article update(int id, String title, String content, Boolean is_active) throws IllegalArgumentException{
-        Optional<Article> optArticle =  articleRepository.findById(id);
-        if(optArticle.isPresent()){
-            Article article =  optArticle.get();
+    public Article update(int id, String title, String content, Boolean is_active) throws IllegalArgumentException {
+        Optional<Article> optArticle = articleRepository.findById(id);
+        if (optArticle.isPresent()) {
+            Article article = optArticle.get();
             article.setTitle(title);
             article.setContent(content);
             article.setIs_active(is_active);
@@ -62,13 +64,13 @@ public class ArticleService {
     }
 
     @Transactional
-    public Article delete(int id) throws IllegalArgumentException{
+    public Article delete(int id) throws IllegalArgumentException {
         Optional<Article> optArticle = articleRepository.findById(id);
-        if(optArticle.isPresent()){
-          Article tmpArticle = optArticle.get();
-          articleRepository.deleteById(id);
-          articleRepository.flush();
-          return tmpArticle;
+        if (optArticle.isPresent()) {
+            Article tmpArticle = optArticle.get();
+            articleRepository.deleteById(id);
+            articleRepository.flush();
+            return tmpArticle;
         }
         throw new IllegalArgumentException();
     }
