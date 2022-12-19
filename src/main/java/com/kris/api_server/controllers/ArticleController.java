@@ -27,51 +27,60 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @RestController
 public class ArticleController {
-    
+
     private ArticleService articleService;
+
     @Autowired
-    public ArticleController(ArticleService articleService){
+    public ArticleController(ArticleService articleService) {
         this.articleService = articleService;
     }
 
+    @GetMapping(produces = "application/json", value = "/articles_success")
+    public int successfulEndPointForTesting() {
+        return HttpServletResponse.SC_OK;
+    }
+
     @GetMapping(produces = "application/json", value = "/articles")
-    public List<Article>  getAll(){
+    public List<Article> getAll() {
         return articleService.getall();
     }
 
     @GetMapping(produces = "application/json", value = "/articles/{id}")
     @ResponseBody
-    public Article getArticleById(@PathVariable("id") int id){
+    public Article getArticleById(@PathVariable("id") int id) {
         Optional<Article> optArticle = articleService.getArticleByID(id);
-        if(optArticle.isPresent()){
+        if (optArticle.isPresent()) {
             return optArticle.get();
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found");
     }
 
     @PostMapping(produces = "application/json", value = "/articles")
-    public Article createArticle(@RequestBody @Valid CreateArticleRequest createArticleRequest, HttpServletResponse response){
+    public Article createArticle(@RequestBody @Valid CreateArticleRequest createArticleRequest,
+            HttpServletResponse response) {
         response.setStatus(HttpServletResponse.SC_CREATED);
         return articleService.create(createArticleRequest);
     }
 
     @PutMapping(produces = "application/json", value = "/articles/{id}")
     @ResponseBody
-    public Article updateArticle(@PathVariable("id") int id, @RequestBody @Valid UpdateArticleRequest updateArticleRequest){
-        try { 
-            return articleService.update(id, updateArticleRequest.getTitle(), updateArticleRequest.getContent(), updateArticleRequest.getIs_active());
-        } catch(IllegalArgumentException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,  "user not found");
-          }
+    public Article updateArticle(@PathVariable("id") int id,
+            @RequestBody @Valid UpdateArticleRequest updateArticleRequest) {
+        try {
+            return articleService.update(id, updateArticleRequest.getTitle(), updateArticleRequest.getContent(),
+                    updateArticleRequest.getIs_active());
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found");
+        }
     }
 
     @DeleteMapping(produces = "application/json", value = "/articles/{id}")
     @ResponseBody
-    public Article deleteArticle(@PathVariable("id") int id){
+    public Article deleteArticle(@PathVariable("id") int id) {
         try {
-        return articleService.delete(id);
-        } catch(IllegalArgumentException e){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,  "user not found");
-           } 
+            return articleService.delete(id);
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found");
+        }
     }
 }
