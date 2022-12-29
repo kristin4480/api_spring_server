@@ -9,7 +9,7 @@
 	</parent>
 	<groupId>com.kris</groupId>
 	<artifactId>api_server</artifactId>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.0.4-SNAPSHOT</version>
 	<name>API Server</name>
 	<description>Spring API Server</description>
 	<properties>
