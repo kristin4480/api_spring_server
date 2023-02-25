@@ -24,10 +24,10 @@ jobs:  # description of the different stages
     # actions - builtin in github, contains different scripts
     # checkout - mandatory first step, that moves the code from github to the runner(ubuntu in this case)
     
-    - name: Set up JDK 11  # will download and configure JDK 11 and Maven, in the runner
+    - name: Set up JDK 17  # will download and configure JDK 17 and Maven, in the runner
       uses: actions/setup-java@v3
       with:   # additional configuration
-        java-version: '11'
+        java-version: '17'
         distribution: 'temurin'
         cache: maven
         
