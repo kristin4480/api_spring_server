@@ -1,0 +1,56 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Java CI with Maven
+
+on:   # when the pipeline will be triggered
+  push:      # action that will trigger the pipeline
+    branches: [ "main" ]  # for which branch the pipeline will be triggered, where "*", means that it will trigger for all branches  
+
+jobs:  # description of the different stages
+  build: # name of the stage
+
+    runs-on: ubuntu-latest # where the pipeline(stage) will run
+
+    steps:   # all actions that will be performed in the stage
+    - name: move code to runner # naming the step
+      uses: actions/checkout@v3   
+    # uses - calls an action
+    # actions - builtin in github, contains different scripts
+    # checkout - mandatory first step, that moves the code from github to the runner(ubuntu in this case)
+    
+    - name: Set up JDK 17  # will download and configure JDK 17 and Maven, in the runner
+      uses: actions/setup-java@v3
+      with:   # additional configuration
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+        
+    - name: Build with Maven  # - builds the java project with Maven
+      run: mvn -B -Dtest="com/kris/api_server/**/*UnitTest.java" package --file pom.xml
+      
+    - name: JaCoCo Code Coverage Report
+      id: jacoco_reporter
+      uses: PavanMudigonda/jacoco-reporter@v4.8
+      with:
+        coverage_results_path: ${ GITHUB_WORKSPACE }/target/site/jacoco/jacoco.xml
+        coverage_report_name: Coverage
+        coverage_report_title: API_server
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        skip_check_run: false
+        minimum_coverage: 20
+        fail_below_threshold: false
+        publish_only_summary: false
+      
+      # Publish Coverage Job Summary  # Optional
+    - name: Add Coverage Job Summary
+      run: echo "${{ steps.jacoco_reporter.outputs.coverageSummary }}" >> $GITHUB_STEP_SUMMARY
+      
+
+
+
