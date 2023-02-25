@@ -2,7 +2,7 @@ FROM openjdk:17.0.2
 
 WORKDIR /home/kris/
 
-COPY target/api_server-0.0.64-SNAPSHOT.jar app.jar
+COPY target/api_server-0.0.42-SNAPSHOT.jar app.jar
 
 COPY entrypoint.sh .
 
